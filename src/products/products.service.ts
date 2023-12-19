@@ -1,3 +1,4 @@
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import {
     BadRequestException,
     Injectable,
@@ -29,9 +30,15 @@ export class ProductsService {
         }
     }
 
-    async findAll() {
+    async findAll(paginationDto: PaginationDto) {
         try {
-            const productList = await this.productRepository.find();
+            const limit = paginationDto.limit;
+            const offset = paginationDto.offset - 1;
+
+            const productList = await this.productRepository.find({
+                take: limit,
+                skip: offset,
+            });
             return productList;
         } catch (error) {
             this.handleDBExceptions(error);
