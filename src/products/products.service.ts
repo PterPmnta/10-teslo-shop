@@ -48,17 +48,24 @@ export class ProductsService {
 
     async findOne(term: string) {
         try {
-            let objetoBusqueda = {};
+            let product: Product;
 
             if (isUUID(term)) {
-                objetoBusqueda = { id: term };
+                product = await this.productRepository.findOne({
+                    where: { id: term },
+                });
             } else {
-                objetoBusqueda = { slug: term };
+                const queryBuilder =
+                    this.productRepository.createQueryBuilder();
+
+                product = await queryBuilder
+                    .where('UPPER(title) =:title or slug =:slug', {
+                        title: term.toUpperCase(),
+                        slug: term.toLowerCase(),
+                    })
+                    .getOne();
             }
 
-            const product = await this.productRepository.findOne({
-                where: objetoBusqueda,
-            });
             return product;
         } catch (error) {
             this.handleDBExceptions(error);
