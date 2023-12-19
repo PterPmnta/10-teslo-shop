@@ -10,6 +10,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
+import { validate as isUUID } from 'uuid';
 
 @Injectable()
 export class ProductsService {
@@ -45,10 +46,18 @@ export class ProductsService {
         }
     }
 
-    async findOne(id: string) {
+    async findOne(term: string) {
         try {
+            let objetoBusqueda = {};
+
+            if (isUUID(term)) {
+                objetoBusqueda = { id: term };
+            } else {
+                objetoBusqueda = { slug: term };
+            }
+
             const product = await this.productRepository.findOne({
-                where: { id: id },
+                where: objetoBusqueda,
             });
             return product;
         } catch (error) {
