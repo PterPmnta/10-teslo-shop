@@ -2,7 +2,7 @@ import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('product')
 export class Product {
-    @PrimaryGeneratedColumn('uuid') id: number;
+    @PrimaryGeneratedColumn('uuid') id: string;
 
     @Column('text', { unique: true }) title: string;
 
