@@ -100,6 +100,9 @@ export class ProductsService {
     }
 
     async update(id: string, updateProductDto: UpdateProductDto) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
             const { images, ...dataToUpdate } = updateProductDto;
 
@@ -113,12 +116,25 @@ export class ProductsService {
                     `Producto con el id: ${id} no encontrado`,
                 );
 
-            const queryRunner = this.dataSource.createQueryRunner();
+            if (images) {
+                await queryRunner.manager.delete(ProductImage, {
+                    product: { id },
+                });
 
-            await this.productRepository.save(product);
+                product.images = images.map((image) =>
+                    this.productImageRepository.create({ url: image }),
+                );
+            }
 
-            return product;
+            await queryRunner.manager.save(product);
+
+            await queryRunner.commitTransaction();
+            await queryRunner.release();
+
+            return this.findOnePlain(id);
         } catch (error) {
+            await queryRunner.rollbackTransaction();
+            await queryRunner.release();
             this.handleDBExceptions(error);
         }
     }
