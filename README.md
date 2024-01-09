@@ -30,4 +30,5 @@
 3. Clonar archivo `.env.template` y renombrarlo a `.env`
 4. Cambiar las variables de entorno
 5. Levantar la base de datos `docker-compose up -d`
-6. Ejecutar el proyecto `yarn start:dev`
+6. Ejecutar el seed `http://localhost:3001/api/seed`
+7. Ejecutar el proyecto `yarn start:dev`
