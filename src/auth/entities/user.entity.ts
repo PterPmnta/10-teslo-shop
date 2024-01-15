@@ -1,22 +1,27 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ type: 'text', length: 100 })
+    @Column({ type: 'text' })
     email: string;
 
-    @Column({ type: 'text', length: 50 })
+    @Column({ type: 'text' })
     password: string;
 
-    @Column({ type: 'text', length: 50 })
+    @Column({ type: 'text' })
     fullName: string;
 
-    @Column({ type: 'bool', default: true, unique: true })
+    @Column({ type: 'bool', default: true })
     isActive: boolean;
 
     @Column({ type: 'text', array: true, default: ['user'] })
     roles: string[];
+
+    @BeforeInsert()
+    convertEmailLowerCase() {
+        this.email = this.email.toLowerCase();
+    }
 }
