@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,28 @@ export class AuthService {
                 password: bcrypt.hashSync(password, 10),
             });
             await this.userRepository.save(user);
+
+            delete user.password;
+            return user;
+        } catch (error) {
+            this.handleDBExceptions(error);
+        }
+    }
+
+    async login(loginUserDto: LoginUserDto) {
+        try {
+            const { password, email } = loginUserDto;
+
+            const user = await this.userRepository.findOne({
+                where: { email },
+                select: { email: true, password: true },
+            });
+
+            if (!user)
+                throw new BadRequestException('Credentials are not valid');
+
+            if (!bcrypt.compareSync(password, user.password))
+                throw new BadRequestException('Credentials are not valid');
 
             delete user.password;
             return user;
