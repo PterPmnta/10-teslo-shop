@@ -51,7 +51,7 @@ export class AuthController {
     testingPrivateRoute_2(@GetUser() user: User) {
         return {
             ok: true,
-            msg: 'Hola ruta privada',
+            msg: 'Ruta privada 2',
             user,
         };
     }
