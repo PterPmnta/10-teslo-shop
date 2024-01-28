@@ -1,4 +1,11 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from './../../products/entities/product.entity';
+import {
+    BeforeInsert,
+    Column,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
@@ -19,6 +26,9 @@ export class User {
 
     @Column({ type: 'text', array: true, default: ['user'] })
     roles: string[];
+
+    @OneToMany(() => Product, (product) => product.user, {})
+    product: Product;
 
     @BeforeInsert()
     convertEmailLowerCase() {
