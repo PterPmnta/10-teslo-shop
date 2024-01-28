@@ -1,3 +1,5 @@
+import { GetUser } from './../auth/decorators/get-user.decorator';
+import { User } from './../auth/entities/user.entity';
 import {
     Controller,
     Get,
@@ -21,8 +23,8 @@ export class ProductsController {
 
     @Post()
     @Auth()
-    create(@Body() createProductDto: CreateProductDto) {
-        return this.productsService.create(createProductDto);
+    create(@Body() createProductDto: CreateProductDto, @GetUser() user: User) {
+        return this.productsService.create(createProductDto, user);
     }
 
     @Get()
@@ -39,8 +41,9 @@ export class ProductsController {
     update(
         @Param('id', ParseUUIDPipe) id: string,
         @Body() updateProductDto: UpdateProductDto,
+        @GetUser() user: User,
     ) {
-        return this.productsService.update(id, updateProductDto);
+        return this.productsService.update(id, updateProductDto, user);
     }
 
     @Delete(':id')
