@@ -16,6 +16,7 @@ import { GetRawHeaders } from './decorators/get-raw-headers.decorator';
 import { UserRoleGuard } from './guards/user-role/user-role.guard';
 import { RoleProtected } from './decorators/role-protected.decorator';
 import { ValidRoles } from './enums/valid-roles.enum';
+import { Auth } from './decorators/auth.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -51,6 +52,16 @@ export class AuthController {
     @RoleProtected(ValidRoles.admin, ValidRoles.superUser)
     @UseGuards(AuthGuard(), UserRoleGuard)
     testingPrivateRoute_2(@GetUser() user: User) {
+        return {
+            ok: true,
+            msg: 'Ruta privada 2',
+            user,
+        };
+    }
+
+    @Get('private3')
+    @Auth(ValidRoles.admin)
+    testingPrivateRoute_3(@GetUser() user: User) {
         return {
             ok: true,
             msg: 'Ruta privada 2',
