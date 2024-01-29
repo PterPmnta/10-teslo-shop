@@ -1,8 +1,10 @@
+import { User } from './../../auth/entities/user.entity';
 import {
     BeforeInsert,
     BeforeUpdate,
     Column,
     Entity,
+    ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -28,6 +30,9 @@ export class Product {
 
     @Column({ type: 'text', array: true, default: [], nullable: true })
     tags: string[];
+
+    @ManyToOne(() => User, (user) => user.product, { eager: true })
+    user: User;
 
     @OneToMany(() => ProductImage, (productImage) => productImage.product, {
         cascade: true,
