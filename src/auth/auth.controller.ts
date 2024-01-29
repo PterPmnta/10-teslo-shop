@@ -61,11 +61,17 @@ export class AuthController {
 
     @Get('private3')
     @Auth(ValidRoles.admin)
-    testingPrivateRoute_3(@GetUser() user: User) {
+    testingPrivateRoute_3(@GetUser() user3: User) {
         return {
             ok: true,
             msg: 'Ruta privada 2',
-            user,
+            user3,
         };
+    }
+
+    @Get('check-status')
+    @Auth()
+    checkAuthStatus(@GetUser() checkUser: User) {
+        return this.authService.checkAuthStatus(checkUser);
     }
 }
