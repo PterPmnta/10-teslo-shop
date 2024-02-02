@@ -9,31 +9,50 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ProductImage } from './product-image.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'products' })
 export class Product {
-    @PrimaryGeneratedColumn('uuid') id: string;
+    @ApiProperty()
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-    @Column('text', { unique: true }) title: string;
+    @ApiProperty()
+    @Column('text', { unique: true })
+    title: string;
 
-    @Column('float', { default: 0 }) price: number;
+    @ApiProperty()
+    @Column('float', { default: 0 })
+    price: number;
 
-    @Column({ type: 'text', nullable: true }) description: string;
+    @ApiProperty()
+    @Column({ type: 'text', nullable: true })
+    description: string;
 
-    @Column({ type: 'text', unique: true }) slug: string;
+    @ApiProperty()
+    @Column({ type: 'text', unique: true })
+    slug: string;
 
-    @Column({ type: 'int', default: 0 }) stock: number;
+    @ApiProperty()
+    @Column({ type: 'int', default: 0 })
+    stock: number;
 
-    @Column({ type: 'text', array: true }) sizes: string[];
+    @ApiProperty()
+    @Column({ type: 'text', array: true })
+    sizes: string[];
 
-    @Column({ type: 'text' }) gender: string;
+    @ApiProperty()
+    @Column({ type: 'text' })
+    gender: string;
 
+    @ApiProperty()
     @Column({ type: 'text', array: true, default: [], nullable: true })
     tags: string[];
 
     @ManyToOne(() => User, (user) => user.product, { eager: true })
     user: User;
 
+    @ApiProperty()
     @OneToMany(() => ProductImage, (productImage) => productImage.product, {
         cascade: true,
         eager: true,
