@@ -11,12 +11,22 @@ export class MessagesWsGateway
     implements OnGatewayConnection, OnGatewayDisconnect
 {
     constructor(private readonly messagesWsService: MessagesWsService) {}
+
     handleConnection(client: Socket) {
-        //throw new Error('Method not implemented.');
-        console.log('Cliente conectado', client.id);
+        //console.log('Cliente conectado', client.id);
+        this.messagesWsService.registerClient(client);
+        this.handleConnectedClients();
     }
+
     handleDisconnect(client: any) {
-        //throw new Error('Method not implemented.');
-        console.log('Cliente desconectado', client.id);
+        //console.log('Cliente desconectado', client.id);
+        this.messagesWsService.removeClient(client.id);
+        this.handleConnectedClients();
+    }
+
+    handleConnectedClients() {
+        console.log({
+            connectados: this.messagesWsService.getConnectedClients(),
+        });
     }
 }
