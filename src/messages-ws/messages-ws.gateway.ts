@@ -18,6 +18,10 @@ export class MessagesWsGateway
     constructor(private readonly messagesWsService: MessagesWsService) {}
 
     handleConnection(client: Socket) {
+        console.log(
+            '📢 [messages-ws.gateway.ts:21]',
+            client.handshake.headers.authentication,
+        );
         this.messagesWsService.registerClient(client);
         this.wss.emit(
             'clients-updated',
